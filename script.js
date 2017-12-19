@@ -73,33 +73,101 @@
 // }
 //
 // console.log(cart.getPrice.call(order))
+//
+//
+// function Tree(age, height, radius) {
+//     this.age = age;   //jezlei niemma this. to wtedy nie da sie dostac do fukcji z zewnatrz (inną zmienna, np tree1)
+//     this.height = height;
+//     this.radius = radius;
+// }
+//
+//
+// function Sosna(age, height, radius){
+//     this.age = age;
+//     this.height = height;
+//     this.radius = radius;
+//
+//
+//     this.getPrice = function(){
+//         return 1500 * this.height * this.radius
+//     }
+// }
+//
+// function Dab(age, height, radius) {
+//     this.age = age;
+//     this.height = height;
+//     this.radius = radius;
+// }
+// var sosna1 = new Sosna(25, 70, 2)
+// console.log(sosna1)
+// console.log(sosna1 instanceof Sosna) //instanceof sprawdza po ktorym konstruktorze dziedziczy nowy obiekt
+// console.log(sosna1.getPrice())
+
+// function Cart(value) {
+//     this.value = value;  //publiczne
+//     var _paidDate = new Date();   //prywatne
+//     this.items = ['mleko', 'maslo', 'jajka', 'kawa', 'ibuprom'];
+//     var _tax = 0.23;
+//
+//     this.getPrice = function (value) {
+//         return this.value * _tax + this.value
+//     }
+// }
+//
+// var order = new Cart(100);
+// console.log(order)
+// console.log(order.getPrice())
 
 
-function Tree(age, height, radius) {
-    this.age = age;
-    this.height = height;
-    this.radius = radius;
-}
 
+function Person(name, surname) {
+    this.health = 50;
+    this.name = name;
+    this.surname = surname;
+};
 
-function Sosna(age, height, radius){
-    this.age = age;
-    this.height = height;
-    this.radius = radius;
+Person.prototype.sayHello = function(){
+    console.info('Greetings from ' + this.name);
+};
 
+function Doctor(name, surname) {
+    Person.call(this, name, surname);
+    this.hospital = 'Main';
+};
 
-    this.getPrice = function(){
-        return 1500 * this.height * this.radius
+Doctor.prototype = Object.create(Person.prototype);  //jezeli by tego nie bylo, to doktor nie powie Greetings...
+Doctor.prototype.constructor = Doctor;  //
+Doctor.prototype.cure = function (person) {
+    if (person instanceof Person === false){
+        throw new Error ('Cannot cure!');
     }
-}
 
-function Dab(age, height, radius) {
-    this.age = age;
-    this.height = height;
-    this.radius = radius;
+    person.health +=10;
+};
+
+var person1 = new Person("jan", "kowalski")
+
+function SuperDoctor(name, surname){
+    Doctor.call(this, name, surname);
+    this.speciality = 'Speciality'
 }
-var sosna1 = new Sosna(25, 70, 2)
-console.log(sosna1)
-console.log(sosna1 instanceof Sosna) //instanceof sprawdza po ktorym konstruktorze dziedziczy nowy obiekt
-console.log(sosna1.getPrice())
+SuperDoctor.prototype = Object.create(Doctor.prototype);
+SuperDoctor.prototype.constructor = SuperDoctor;
+Doctor.prototype.cure = function (person) {
+    if (person instanceof Person === false){
+        throw new Error ('Cannot cure!');
+    }
+
+    person.health +=20;
+};
+
+console.log(SuperDoctor.prototype)
+console.log(SuperDoctor.prototype.constructor)
+console.log(SuperDoctor)
+
+var person2 = new Person('Adam', 'Nowak')
+var doctor2 = new Doctor('Lecznik', 'Doktorski')
+var superdoctor2 = new SuperDoctor('SuperImie', 'SuperNazwisko')
+
+console.log(person2, doctor2, superdoctor2);
 
